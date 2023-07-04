@@ -17,7 +17,7 @@
             <th>introduction</th>
             <th><%= @user.introduction %></th>  <!-- 固定値 -->
           </tr>
-        </table>　 
+        </table>
         <div class='row'>
           <!-- 編集リンクが固定値 -->
           <%= link_to edit_user_path(@user), class: "btn btn-outline-secondary btn-block" do %>
@@ -28,22 +28,22 @@
         <!-- form_withを用いて新規投稿フォームを作成しましょう。 -->
         <%= form_with model: Video, local:true do |f| %>
           <div class="form-group">
-              <%= f.label :title, "Title" %>
-              <%= f.text_field :title, class: "form-control" %>
-            </div>
+            <%= f.label :title, "Title" %>
+            <%= f.text_field :title, class: "form-control" %>
+          </div>
             
-            <div class="form-group">
-              <%= f.label :youtube_url, "URL" %>
-              <%= f.text_area :youtube_url, class: "form-control" %>
-            </div>
+          <div class="form-group">
+            <%= f.label :youtube_url, "URL" %>
+            <%= f.text_area :youtube_url, class: "form-control" %>
+          </div>
             
-            <div class="form-group">
-              <%= f.label :body, "Opinion" %>
-              <%= f.text_area :body, class: "form-control" %>
-            </div>
-            <div class="form-group">
-              <%= f.submit "Submit", class: "btn btn-success" %>
-            </div>
+          <div class="form-group">
+            <%= f.label :body, "Opinion" %>
+            <%= f.text_area :body, class: "form-control" %>
+          </div>
+          <div class="form-group">
+            <%= f.submit "Submit", class: "btn btn-success" %>
+          </div>
         <% end %>
       </div>
       <div class='col-md-8 offset-md-1'>
@@ -54,16 +54,16 @@
             <tr>
               <td>
                 <a>
-                <%= link_to user_path(@video.user) do %>
-                  <% if @user.profile_image.present? %>
-                    <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "default-image.jpg" %>
-                  <% else %>
-                    <%= image_tag "default-image.jpg" %>
+                  <%= link_to user_path(@video.user) do %>
+                    <% if @user.profile_image.present? %>
+                      <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "default-image.jpg" %>
+                    <% else %>
+                      <%= image_tag "default-image.jpg" %>
+                    <% end %>
                   <% end %>
-                <% end %>
                 </a>
                 <br>
-                   <%= link_to @user.name, user_path(@user) %>
+                <%= link_to @user.name, user_path(@user) %>
               </td>
               
               <td>
@@ -73,54 +73,64 @@
                 <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= extract_youtube_id(@video.youtube_url) %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               </td>
               <td>
+                <% if @video.favorited_by?(current_user) %>
+                  <p>
+                    <%= link_to video_favorites_path(@video), method: :delete do %>
+                      ♥<%= @video.favorites.count %> いいね
+                    <% end %>
+                  </p>
+                <% else %>
+                  <p>
+                    <%= link_to video_favorites_path(@video), method: :post do %>
+                      ♡<%= @video.favorites.count %> いいね
+                    <% end %>
+                  </p>
+                <% end %>
+              </td>
+              <td>
                 <%= @video.body %>
               </td>
               
-              
               <td>
                 <% if @video.user == current_user %>
-                    <%= link_to 'Edit', edit_video_path(@video), class: "btn btn-sm btn-success" %>
+                  <%= link_to 'Edit', edit_video_path(@video), class: "btn btn-sm btn-success" %>
                 <% end %>
               </td>
               
               <td>
                 <% if @video.user == current_user %>
-                    <%= link_to 'Destroy', video_path(@video), method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger" %>
+                  <%= link_to 'Destroy', video_path(@video), method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger" %>
                 <% end %>
               </td>
-              </tbody>
+            </tr>
+          </tbody>
         </table>
       
-            <div class='row'>
-            <td>
-             <p>コメント件数：<%= @video.post_comments.count %></p>
-             <td>
-              <%= form_with(model:[@video, @post_comment], local: true) do |f| %>
+        <div class='row'>
+          <td>
+            <p>コメント件数：<%= @video.post_comments.count %></p>
+          <td>
+            <%= form_with(model:[@video, @post_comment], local: true) do |f| %>
               <%= f.text_area :comment, rows:'5',placeholder: "コメントをここに" %>
               <%= f.submit "送信する" %>
-              <% end %>
-             </td>
-             </div>
-             <div class='row'>
-           <% @video.post_comments.each do |post_comment| %>
-           <div class="row">
-            
-           　　<%= attachment_image_tag @video.user, :profile_image, :fill, 40, 40, format: 'jpeg', fallback: "default-image.jpg" %>
-           
+            <% end %>
+          </td>
+        </div>
+             
+        <% @video.post_comments.each do |post_comment| %>
+          <div class="row">
+            <%= attachment_image_tag post_comment.user, :profile_image, :fill, 40, 40, format: 'jpeg', fallback: "default-image.jpg" %>
             <%= post_comment.user.name %>
             <%= post_comment.comment %><%= post_comment.created_at.strftime('%Y/%m/%d') %>
-           <% if post_comment.user == current_user %>
-            <div>
-            <%= link_to "削除", video_post_comment_path(post_comment.video, post_comment), method: :delete %>
-            </div>
-              <% end %>
+            <% if post_comment.user == current_user %>
+              <div>
+                <%= link_to "削除", video_post_comment_path(post_comment.video, post_comment), method: :delete %>
               </div>
-             <% end %>
-             </div>
-          </td>
-       </tr>
-       
-     </div>     
+            <% end %>
+            
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </main>
