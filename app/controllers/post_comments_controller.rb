@@ -3,9 +3,12 @@ class PostCommentsController < ApplicationController
     video = Video.find(params[:video_id])
     comment = current_user.post_comments.new(post_comment_params)
     comment.video_id = video.id
-    comment.save
-    flash[:notice] = 'You have created comment successfully.'
-    redirect_to video_path(video)
+    if comment.save
+      flash[:notice] = 'You have created comment successfully.'
+      redirect_to video_path(video)
+    else
+      redirect_to video_path(video)
+    end
   end
   
   def destroy
