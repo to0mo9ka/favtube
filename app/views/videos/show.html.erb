@@ -68,7 +68,15 @@
               
               
               <td>
-                <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= extract_youtube_id(@video.youtube_url) %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <div>
+                <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= extract_youtube_id(@video.youtube_url) %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                  
+                </iframe>
+                </div>
+                <%= link_to @video.title, video_path(@video) %>
+                <div>
+                <%= @video.body %>
+                </div>
               </td>
               <td>
                 <% if @video.favorited_by?(current_user) %>
@@ -102,19 +110,9 @@
           </tbody>
         </table>
         <div class='row'>
-          <div class="mb-3" style="margin-left: 150px;">
-            <td>
-                <%= link_to @video.title, video_path(@video) %>
-              </td>
+          
          </div>
-         </div>
-        <div class='row'>
-          <div class="mb-5" style="margin-left: 150px;">
-          <td>
-                <%= @video.body %>
-              </td>
-              </div>
-        </div>
+        
         <div class='row'>
           <td>
             <p>コメント件数：<%= @video.post_comments.count %></p>
