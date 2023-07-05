@@ -33,7 +33,7 @@ class VideosController < ApplicationController
   def update
     @video = Video.find(params[:id])
     if @video.update(video_params)
-      flash[:notice] = "You have updated user successfully."
+      flash[:notice] = "You have updated video successfully."
       redirect_to video_path
     else
       render :edit
