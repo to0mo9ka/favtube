@@ -118,18 +118,31 @@
         </div>
              
         <% @video.post_comments.each do |post_comment| %>
-          <div class="row">
-            <%= attachment_image_tag post_comment.user, :profile_image, :fill, 40, 40, format: 'jpeg', fallback: "default-image.jpg" %>
-            <%= post_comment.user.name %>
-            <%= post_comment.comment %><%= post_comment.created_at.strftime('%Y/%m/%d') %>
-            <% if post_comment.user == current_user %>
-              <div>
-                <%= link_to "削除", video_post_comment_path(post_comment.video, post_comment), method: :delete %>
-              </div>
-            <% end %>
-            
-          </div>
+  <div class="row">
+    <%= attachment_image_tag post_comment.user, :profile_image, :fill, 40, 40, format: 'jpeg', fallback: "default-image.jpg" %>
+    <%= post_comment.user.name %>
+    <%= post_comment.comment %><%= post_comment.created_at.strftime('%Y/%m/%d') %>
+    <% if post_comment.user == current_user %>
+      <div>
+        <%= link_to "削除", video_post_comment_path(@video, post_comment), method: :delete %>
+      </div>
+    <% end %>
+    <% if post_comment.favorited_by?(current_user) %>
+      <p>
+        <%= link_to video_post_comment_favorite_comments_path(@video, post_comment), method: :delete do %>
+          ♥<%= post_comment.favorite_comments.count %> いいね
         <% end %>
+      </p>
+    <% else %>
+      <p>
+        <%= link_to video_post_comment_favorite_comments_path(@video, post_comment), method: :post do %>
+          ♡<%= post_comment.favorite_comments.count %> いいね
+        <% end %>
+      </p>
+    <% end %>
+  </div>
+<% end %>
+
       </div>
     </div>
   </div>
