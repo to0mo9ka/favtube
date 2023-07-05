@@ -66,9 +66,7 @@
                 <%= link_to @user.name, user_path(@user) %>
               </td>
               
-              <td>
-                <%= link_to @video.title, video_path(@video) %>
-              </td>
+              
               <td>
                 <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= extract_youtube_id(@video.youtube_url) %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               </td>
@@ -87,9 +85,7 @@
                   </p>
                 <% end %>
               </td>
-              <td>
-                <%= @video.body %>
-              </td>
+              
               
               <td>
                 <% if @video.user == current_user %>
@@ -105,16 +101,32 @@
             </tr>
           </tbody>
         </table>
-      
+        <div class='row'>
+          <div class="mb-3" style="margin-left: 150px;">
+            <td>
+                <%= link_to @video.title, video_path(@video) %>
+              </td>
+         </div>
+         </div>
+        <div class='row'>
+          <div class="mb-5" style="margin-left: 150px;">
+          <td>
+                <%= @video.body %>
+              </td>
+              </div>
+        </div>
         <div class='row'>
           <td>
             <p>コメント件数：<%= @video.post_comments.count %></p>
+            </td>
+            <div style="margin-left: 40px;" >
           <td>
             <%= form_with(model:[@video, @post_comment], local: true) do |f| %>
-              <%= f.text_area :comment, rows:'5',placeholder: "コメントをここに" %>
-              <%= f.submit "送信する" %>
+              <%= f.text_area :comment, rows:'2', cols: '50', placeholder: "コメントをここに" %>
+              <%= f.submit "Comment" %>
             <% end %>
           </td>
+          </div>
         </div>
              
         <% @video.post_comments.each do |post_comment| %>
