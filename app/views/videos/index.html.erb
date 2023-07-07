@@ -74,6 +74,9 @@
       <td>
         <%= link_to user_path(video.user) do %>
           <%= attachment_image_tag video.user, :profile_image, :fill, 80, 80, format: 'jpeg', fallback: "default-image.jpg" %>
+          <div>
+          <%= video.user.name %>
+          </div>
         <% end %>
       </td>
       

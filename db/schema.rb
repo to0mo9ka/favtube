@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_04_115113) do
+ActiveRecord::Schema.define(version: 2023_07_07_031528) do
 
   create_table "favorite_comments", force: :cascade do |t|
     t.integer "user_id"
