@@ -1,54 +1,53 @@
 <main>
-  <p id="notice"><%= flash[:notice] %></p>
+  <p id="notice">
+    <%= flash[:notice] %>
+  </p>
   <div class='container px-5 px-sm-0'>
     <div class='row'>
       <div class='col-md-3'>
         <h2>User info</h2>
-        <!-- モックのため、固定値になっている部分があります。アプリ完成前に修正しましょう。 -->
         <table class='table'>
           <tr>
-            <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "default-image.jpg" %>  <!-- 固定値 -->
+            <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "default-image.jpg" %>
           </tr>
           <tr>
             <th>name</th>
-            <th><%= @user.name %></th>  <!-- 固定値 -->
+            <th>
+              <%= @user.name %>
+            </th>
           </tr>
           <tr>
             <th>introduction</th>
-            <th><%= @user.introduction %></th>  <!-- 固定値 -->
+            <th>
+              <%= @user.introduction %>
+            </th>
           </tr>
-        </table>　 
+        </table>
         <div class='row'>
-          <%= link_to edit_user_path(@user), class: "btn btn-outline-secondary btn-block" do %>
-          <!-- 編集リンクが固定値 -->
-          
-            <i class="fas fa-user-cog"></i>
-          <% end %>
-          
+          <%= link_to edit_user_path(@user), class: "btn btn-outline-secondary btn-block" do %> <i class="fas fa-user-cog"></i>
+            <% end %>
         </div>
         <h2 class="mt-3">New Video</h2>
-        <!-- form_withを用いて新規投稿フォームを作成しましょう。 -->
         <%= form_with model: @video, local:true do |f| %>
           <div class="form-group">
             <%= f.label :title, "Title" %>
-            <%= f.text_field :title, class: "form-control" %>
+              <%= f.text_field :title, class: "form-control" %>
           </div>
           <div class="form-group">
-              <%= f.label :youtube_url, "URL" %>
+            <%= f.label :youtube_url, "URL" %>
               <%= f.text_area :youtube_url, class: "form-control" %>
-            </div>
+          </div>
           <div class="form-group">
             <%= f.label :body, "Opinion" %>
-            <%= f.text_area :body, class: "form-control" %>
+              <%= f.text_area :body, class: "form-control" %>
           </div>
           <div class="form-group">
             <%= f.submit "Submit", class: "btn btn-success" %>
           </div>
-        <% end %>
+          <% end %>
       </div>
       <div class='col-md-8 offset-md-1'>
         <h2>Videos</h2>
-        <!-- 投稿した書籍一覧表示を作成しましょう。 -->
         <table class='table table-hover table-inverse'>
           <thead>
             <tr>
@@ -61,18 +60,17 @@
           <tbody>
             <% @user.videos.each do |video| %>
               <tr>
+                <td> <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= extract_youtube_id(video.youtube_url) %>"
+                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe> </td>
                 <td>
-                  <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= extract_youtube_id(video.youtube_url) %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-                </td>
-                  <td>
                   <%= link_to video.title, video_path(video) %>
                 </td>
                 <td>
                   <%= video.body %>
                 </td>
               </tr>
-            <% end %>
+              <% end %>
           </tbody>
         </table>
       </div>
