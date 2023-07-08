@@ -10,25 +10,19 @@ class VideosController < ApplicationController
     @user = @video.user
   end
 
-  
   def create
-  @video = Video.new(video_params)
-  @video.user_id = current_user.id
+    @video = Video.new(video_params)
+    @video.user_id = current_user.id
 
-  extract_start_time(@video.youtube_url)
-
-  if @video.save
-    flash[:notice] = 'You have created the video successfully.'
-    redirect_to video_path(@video)
-  else
-    @videos = Video.all
-    render :index
+    if @video.save
+      flash[:notice] = 'You have created the video successfully.'
+      redirect_to video_path(@video)
+    else
+      @videos = Video.all
+      render :index
+    end
   end
-end
 
-
-
-  
   def edit
     @video = Video.find(params[:id])
     if @video.user != current_user
@@ -57,13 +51,5 @@ end
   def video_params
     params.require(:video).permit(:title, :youtube_url, :body)
   end
-
-def extract_start_time(url)
-  if url =~ /t=(\d+)/
-    @video.start_time = $1.to_i
-  end
-end
-
-
 
 end

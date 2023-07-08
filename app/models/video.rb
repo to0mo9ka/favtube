@@ -14,17 +14,4 @@ class Video < ApplicationRecord
   def favorited_by?(user)
     favorites.where(user_id: user.id).exists?
   end
-  
-  before_save :extract_start_time_from_url
-
-  private
-
-  def extract_start_time_from_url
-    if youtube_url =~ /t=(\d+)/
-      self.start_time = $1.to_i
-    end
-  end
-
-
-  
 end
