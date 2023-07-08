@@ -29,10 +29,9 @@ ActiveRecord::Schema.define(version: 2023_07_07_031528) do
   create_table "post_comments", force: :cascade do |t|
     t.text "comment"
     t.integer "user_id"
-    t.integer "post_video_id"
+    t.integer "video_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "video_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -52,11 +51,12 @@ ActiveRecord::Schema.define(version: 2023_07_07_031528) do
 
   create_table "videos", force: :cascade do |t|
     t.string "title"
-    t.string "body"
+    t.text "body"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
     t.string "youtube_url"
+    t.integer "start_time"
   end
 
 end
