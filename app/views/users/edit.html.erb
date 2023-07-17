@@ -32,6 +32,13 @@
                 <%= f.label :introduction, "Introduction" %>
                   <%= f.text_area :introduction, class: "form-control introduction" %>
               </div>
+              <div class="field">
+    <%= f.label :account_type, "Account Type" %><br />
+    <%= f.radio_button :account_type, "public_account" %>
+    <%= f.label :account_type, "Public Account" %>
+    <%= f.radio_button :account_type, "private_account" %>
+    <%= f.label :account_type, "Private Account" %>
+  </div>
               <div class="form-group">
                 <%= f.submit "Update User", class: "btn btn-secondary", data: { disable_with: "Update User" } %>
               </div>
