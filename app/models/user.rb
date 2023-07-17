@@ -1,6 +1,11 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  enum account_type: {
+    public_account: 0,   # 公開アカウント
+    private_account: 1   # 非公開アカウント
+  }
+  
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
          

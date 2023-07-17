@@ -12,6 +12,20 @@ class UsersController < ApplicationController
     @follower_users = @user.follower_user
   end
   
+  def follow
+    @user = User.find(params[:id])
+    if @user.private_account?
+      current_user.follow(@user.id)
+      flash[:notice] = "フォローリクエストを送信しました。"
+    else
+      current_user.follow(@user.id, status: :approved)
+      flash[:notice] = "フォローしました。"
+    end
+
+    @user.approve_follow_request(current_user) # フォローリクエストの承認を確認
+    redirect_to @user
+  end
+  
   def follows
     user = User.find(params[:id])
     @users = user.following_user.page(params[:page]).per(10).reverse_order
