@@ -20,20 +20,22 @@ class UsersController < ApplicationController
   end
   
   def follow
-    @user = User.find(params[:id])
-    if @user.private_account?
-      current_user.follow(@user.id)
-      flash[:notice] = "フォローリクエストを送信しました。"
-    else
-      current_user.follow(@user.id, status: :approved)
-      flash[:notice] = "フォローしました。"
-    end
-
-    # フォローリクエストの承認を確認（非公開アカウントの場合のみ）
-    @user.approved_follow_request(current_user) if @user.private_account?
-
-    redirect_to @user
+  @user = User.find(params[:id])
+  if current_user.following?(@user)
+    current_user.unfollow(@user)
+    flash[:notice] = "フォローを解除しました。"
+  elsif @user.private_account?
+    current_user.follow(@user, status: :pending)
+    flash[:notice] = "フォローリクエストを送信しました。"
+  else
+    current_user.follow(@user, status: :approved)
+    flash[:notice] = "フォローしました。"
   end
+
+
+  redirect_to @user
+  end
+
   
   def follows
     user = User.find(params[:id])
