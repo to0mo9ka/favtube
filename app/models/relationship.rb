@@ -10,7 +10,7 @@ class Relationship < ApplicationRecord
   def approve_follow_request(requester)
     return unless followed.private_account?
 
-    relationship = followed.follower.find_by(follower_id: requester.id)
+    relationship = followed.followed_relationships.find_by(follower_id: requester.id)
     return unless relationship&.pending?
 
     relationship.update(status: :approved)
