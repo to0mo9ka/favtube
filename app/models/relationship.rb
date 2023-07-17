@@ -8,9 +8,9 @@ class Relationship < ApplicationRecord
   
   # 非公開アカウントの所有者がフォローリクエストを承認するメソッド
   def approve_follow_request(requester)
-    return unless followed.private_account?
+    return unless followed_relationships.private_account?
 
-    relationship = followed.followed_relationships.find_by(follower_id: requester.id)
+    relationship = followed_relationships.find_by(follower_id: requester.id)
     return unless relationship&.pending?
 
     relationship.update(status: :approved)
