@@ -25,6 +25,15 @@
             <%= f.label :password_confirmation %><br />
             <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
           </div>
+          
+          <div class="field">
+    <%= f.label :account_type, "Account Type" %><br />
+    <%= f.radio_button :account_type, "public_account" %>
+    <%= f.label :account_type, "Public Account" %>
+    <%= f.radio_button :account_type, "private_account" %>
+    <%= f.label :account_type, "Private Account" %>
+  </div>
+  
           <div class="actions">
             <%= f.submit "Sign up", class: "btn btn-sm btn-success" %>
           </div>
