@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     end
 
     # フォローリクエストの承認を確認（非公開アカウントの場合のみ）
-    @user.approve_follow_request(current_user) if @user.private_account?
+    @user.approved_follow_request(current_user) if @user.private_account?
 
     redirect_to @user
   end

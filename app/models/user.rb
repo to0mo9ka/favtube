@@ -4,6 +4,14 @@ class User < ApplicationRecord
     private_account: 1   # 非公開アカウント
   }
   
+  def self.account_types
+    {
+      public_account: '公開アカウント',
+      private_account: '非公開アカウント'
+      # もしくは必要な他のアカウントタイプを追加
+    }
+  end
+  
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
          
@@ -22,9 +30,15 @@ class User < ApplicationRecord
   has_many :following_user, through: :follower, source: :followed # 自分がフォローしている人
   has_many :follower_user, through: :followed, source: :follower # 自分をフォローしている人
   
+  has_many :follower_relationships, foreign_key: "followed_id", class_name: "Relationship"
+  has_many :followed_relationships, foreign_key: "follower_id", class_name: "Relationship"
+  has_many :followers, through: :follower_relationships, source: :follower
+  has_many :followed_users, through: :followed_relationships, source: :followed
+
+  
   # ユーザーをフォローする
-  def follow(user_id)
-    follower.create(followed_id: user_id)
+  def follow(followed_id)
+    follower.create(followed_id: followed_id)
   end
 
   # ユーザーのフォローを外す
@@ -39,7 +53,7 @@ class User < ApplicationRecord
   
   # フォローリクエストを承認する
   def approve_follow_request(follower)
-    request = follower.find_by(following: self)
+    request = follower_relationships.find_by(followed: self)
     request.update(status: 'approved') if request
   end
   
@@ -50,7 +64,6 @@ class User < ApplicationRecord
   
   # ユーザーが特定のユーザーのフォローリクエストを承認しているかどうかを確認
   def approved_follow_request?(user)
-    relationship = follower.find_by(followed: user)
-    relationship&.status == 'approved'
+    followed.exists?(follower: user, status: 'approved')
   end
 end
