@@ -7,9 +7,16 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @video = Video.new
-    @videos = @user.videos.page(params[:page]).reverse_order
+    #@videos = @user.videos.page(params[:page]).reverse_order
     @following_users = @user.following_user
     @follower_users = @user.follower_user
+    
+    if @user.private_account? && !current_user.approved_follow_request?(@user)
+      @videos = [] # リクエストが承認されていない場合、@videos を空の配列に設定
+    else
+      @videos = @user.videos.page(params[:page]).reverse_order
+    end
+    
   end
   
   def follow
@@ -22,7 +29,9 @@ class UsersController < ApplicationController
       flash[:notice] = "フォローしました。"
     end
 
-    @user.approve_follow_request(current_user) # フォローリクエストの承認を確認
+    # フォローリクエストの承認を確認（非公開アカウントの場合のみ）
+    @user.approve_follow_request(current_user) if @user.private_account?
+
     redirect_to @user
   end
   

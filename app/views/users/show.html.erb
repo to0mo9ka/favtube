@@ -96,6 +96,10 @@
               <% end %>
           </tbody>
         </table>
+        <% if @user.private_account? && !current_user.approved_follow_request?(@user) %>
+            <!-- リクエストが承認されていない場合のメッセージ -->
+            <p>このユーザーの投稿情報は非公開です。リクエストを承認してください。</p>
+          <% end %>
       </div>
     </div>
   </div>

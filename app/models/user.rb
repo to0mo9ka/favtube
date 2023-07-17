@@ -1,6 +1,4 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   enum account_type: {
     public_account: 0,   # 公開アカウント
     private_account: 1   # 非公開アカウント
@@ -24,7 +22,7 @@ class User < ApplicationRecord
   has_many :following_user, through: :follower, source: :followed # 自分がフォローしている人
   has_many :follower_user, through: :followed, source: :follower # 自分をフォローしている人
   
-    # ユーザーをフォローする
+  # ユーザーをフォローする
   def follow(user_id)
     follower.create(followed_id: user_id)
   end
@@ -37,5 +35,22 @@ class User < ApplicationRecord
   # フォローしていればtrueを返す
   def following?(user)
     following_user.include?(user)
+  end
+  
+  # フォローリクエストを承認する
+  def approve_follow_request(follower)
+    request = follower.find_by(following: self)
+    request.update(status: 'approved') if request
+  end
+  
+  # フォローリクエストを送信しているかどうかを確認するメソッド
+  def pending_follow_request?(user)
+    follower.exists?(followed: user, status: 'pending')
+  end
+  
+  # ユーザーが特定のユーザーのフォローリクエストを承認しているかどうかを確認
+  def approved_follow_request?(user)
+    relationship = follower.find_by(followed: user)
+    relationship&.status == 'approved'
   end
 end
