@@ -37,7 +37,7 @@ class User < ApplicationRecord
 
   
   # ユーザーをフォローする
-  def follow(followed_id)
+  def follow(followed_id, status)
     follower.create(followed_id: followed_id)
   end
 
