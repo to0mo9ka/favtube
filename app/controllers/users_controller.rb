@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     @following_users = @user.following_user
     @follower_users = @user.follower_user
     
-    if @user.private_account? && !current_user.approved_follow_request?(@user)
+    if @user.private_account? && !current_user.approved_follow_request?(@user) && @user != current_user
       @videos = [] # リクエストが承認されていない場合、@videos を空の配列に設定
     else
       @videos = @user.videos.page(params[:page]).reverse_order

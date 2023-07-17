@@ -87,7 +87,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @user.videos.each do |video| %>
+            <% @videos.each do |video| %>
               <tr>
                 <td> <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= find_youtube_url(video.youtube_url) %>"
                     title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -102,9 +102,9 @@
               <% end %>
           </tbody>
         </table>
-        <% if @user.private_account? && !current_user.approved_follow_request?(@user) %>
+        <% if @user.private_account? && !current_user.approved_follow_request?(@user) && @user != current_user %> 
             <!-- リクエストが承認されていない場合のメッセージ -->
-            <p>このユーザーの投稿情報は非公開です。リクエストを承認してください。</p>
+            <p>このユーザーの投稿情報は非公開です。リクエストを申請してください。</p>
           <% end %>
       </div>
     </div>
