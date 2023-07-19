@@ -7,20 +7,30 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @video = Video.new
-    #@videos = @user.videos.page(params[:page]).reverse_order
     @following_users = @user.following_user
     @follower_users = @user.follower_user
     
-    if @user.private_account? # ユーザーが非公開アカウントの場合
-    if !current_user.approved_follow_request?(@user) && @user != current_user # ログインしているユーザーがフォローリクエストを承認していない場合
-      @videos = [] # 非公開かつフォローが承認されていない場合、@videos を空の配列に設定
+    #if @user.private_account? # ユーザーが非公開アカウントの場合
+    #if !current_user.approved_follow_request?(@user) && @user != current_user # ログインしているユーザーがフォローリクエストを承認していない場合
+      #@videos = [] # 非公開かつフォローが承認されていない場合、@videos を空の配列に設定
       # 非公開のメッセージを表示するコードを追加
+    #else
+      #@videos = @user.videos.page(params[:page]).reverse_order # フォローリクエストが承認された場合、@videos にユーザーの投稿をセット
+    #end
+  #else # ユーザーが公開アカウントの場合
+    #@videos = @user.videos.page(params[:page]).reverse_order # 公開アカウントの場合、@videos にユーザーの投稿をセット
+  #end
+  if @user.private_account?
+      if !current_user.approved_follow_request?(@user) && @user != current_user
+        @videos = []
+        # 非公開のメッセージを表示するコードを追加
+        puts "User's videos are private and follow request is not approved."
+      else
+        @videos = @user.videos.page(params[:page]).reverse_order
+      end
     else
-      @videos = @user.videos.page(params[:page]).reverse_order # フォローリクエストが承認された場合、@videos にユーザーの投稿をセット
+      @videos = @user.videos.page(params[:page]).reverse_order
     end
-  else # ユーザーが公開アカウントの場合
-    @videos = @user.videos.page(params[:page]).reverse_order # 公開アカウントの場合、@videos にユーザーの投稿をセット
-  end
     
   end
   

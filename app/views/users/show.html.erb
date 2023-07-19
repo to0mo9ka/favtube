@@ -20,7 +20,7 @@
    
    <% if current_user != @user %>
   <% if current_user.following?(@user) %>
-    <%= link_to 'フォロー外す', user_relationships_path(@user.id), method: :delete, class: "btn-sm btn-danger" %>
+    <%= link_to 'あフォロー外す', user_relationships_path(@user.id), method: :delete, class: "btn-sm btn-danger" %>
   <% else %>
     <% if @user.private_account? %>
       <% if current_user.approved_follow_request?(@user) %>
@@ -87,26 +87,52 @@
             </tr>
           </thead>
           <tbody>
-            <% if @user.private_account? && !current_user.approved_follow_request?(@user) && @user != current_user %>
-            <!-- リクエストが承認されていない場合のメッセージ -->
-            <td colspan="4">
-            <p>このユーザーの投稿情報は非公開です。リクエストを申請してください。</p>
-            </td>
-            <% else %>
-            <% @videos.each do |video| %>
-            <tr>
-            <td> <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= find_youtube_url(video.youtube_url) %>"
+            
+            <% if @user.private_account? %>
+  <% if current_user == @user || current_user.approved_follow_request?(@user) %>
+    <!-- 非公開アカウントで、自分のアカウントまたはフォローリクエストが承認されている場合の投稿表示 -->
+    <% @videos.each do |video| %>
+      <tr>
+        <td>
+          <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= find_youtube_url(video.youtube_url) %>"
+            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </td>
+        <td>
+          <%= link_to video.title, video_path(video) %>
+        </td>
+        <td>
+          <%= video.body %>
+        </td>
+      </tr>
+    <% end %>
+  <% else %>
+    <!-- 非公開アカウントで、フォローリクエストが承認されていない場合のメッセージ表示 -->
+    <td colspan="4">
+      <p>このユーザーの投稿情報は非公開です。リクエストを申請してください。</p>
+    </td>
+  <% end %>
+<% else %>
+  <!-- 公開アカウントの場合の投稿表示 -->
+  <% @videos.each do |video| %>
+    <tr>
+      <td>
+        <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= find_youtube_url(video.youtube_url) %>"
           title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe> </td>
-            <td>
-            <%= link_to video.title, video_path(video) %>
-            </td>
-            <td>
-           <%= video.body %>
+          allowfullscreen>
+        </iframe>
+      </td>
+      <td>
+        <%= link_to video.title, video_path(video) %>
+      </td>
+      <td>
+        <%= video.body %>
       </td>
     </tr>
   <% end %>
 <% end %>
+
 
           </tbody>
         </table>

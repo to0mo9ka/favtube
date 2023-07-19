@@ -65,8 +65,31 @@ class User < ApplicationRecord
     following_relationships.exists?(followed: user, status: 'pending')
   end
   
-  # ユーザーが特定のユーザーのフォローリクエストを承認しているかどうかを確認
+  # フォローリクエストが承認されていれば true を返す
   def approved_follow_request?(user)
-    followed_relationships.exists?(follower: user, status: 'approved')
+    # followed_relationships を使ってフォローリクエストが承認されているかを確認する
+    relationship = followed_relationships.find_by(follower_id: user.id, status: 'approved')
+
+    # 必要に応じてログを出力して実行結果を確認する
+    puts "Checking approved_follow_request? for user_id=#{self.id} and follower_id=#{user.id}"
+
+    if relationship
+      puts "Follow request is approved."
+    else
+      puts "Follow request is not approved."
+    end
+
+    # フォローリクエストが承認されていれば true を返す
+    return relationship.present?
   end
+  
+  def approve_follow_request(requester)
+    return unless private_account?
+
+    relationship = follower.following_relationships.find_by(followed: self, status: :pending)
+    return unless relationship
+
+    relationship.update(status: :approved)
+  end
+  
 end
