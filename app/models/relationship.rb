@@ -7,10 +7,10 @@ class Relationship < ApplicationRecord
   belongs_to :followed, class_name: "User"
   
   # 非公開アカウントの所有者がフォローリクエストを承認するメソッド
-  def approve_follow_request(requester)
+  def approved_follow_request(requester)
     return unless followed.private_account?
 
-    relationship = follower.following_relationships.find_by(followed: followed, status: :pending)
+    relationship = requester.following_relationships.find_by(followed: followed, status: :pending)
     return unless relationship
 
     relationship.update(status: :approved)

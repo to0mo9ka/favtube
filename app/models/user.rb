@@ -44,9 +44,13 @@ class User < ApplicationRecord
 
   # ユーザーのフォローを外す
   def unfollow(user_id)
-  relationship = following_relationships.find_by(followed_id: user_id)
+  # 非公開アカウントの場合は承認済みのフォローリクエストのみを対象とする
+  relationship = following_relationships.find_by(followed_id: user_id, status: 'approved')
+
+  # フォローリクエストが承認されていればフォローを解除
   relationship.destroy if relationship
   end
+
 
 
   # フォローしていればtrueを返す
@@ -55,10 +59,10 @@ class User < ApplicationRecord
   end
   
   # フォローリクエストを承認する
-  def approve_follow_request(follower)
-    request = follower_relationships.find_by(followed: self)
-    request.update(status: 'approved') if request
-  end
+  #def approved_follow_request(follower)
+    #request = followed_relationships.find_by(followed: self)
+    #request.update(status: 'approved') if request
+  #end
   
   # フォローリクエストを送信しているかどうかを確認するメソッド
   def pending_follow_request?(user)
@@ -68,10 +72,10 @@ class User < ApplicationRecord
   # フォローリクエストが承認されていれば true を返す
   def approved_follow_request?(user)
     # followed_relationships を使ってフォローリクエストが承認されているかを確認する
-    relationship = followed_relationships.find_by(follower_id: user.id, status: 'approved')
+    relationship = following_relationships.find_by(followed_id: user.id, status: 'approved')
 
     # 必要に応じてログを出力して実行結果を確認する
-    puts "Checking approved_follow_request? for user_id=#{self.id} and follower_id=#{user.id}"
+    puts "Checking approved_follow_request? for followed_id=#{self.id} and follower_id=#{user.id}"
 
     if relationship
       puts "Follow request is approved."
@@ -83,13 +87,17 @@ class User < ApplicationRecord
     return relationship.present?
   end
   
-  def approve_follow_request(requester)
-    return unless private_account?
+  #def approved_follow_request(user)
+    #return unless private_account?
 
-    relationship = follower.following_relationships.find_by(followed: self, status: :pending)
-    return unless relationship
+    #relationship = follower.following_relationships.find_by(followed: self, status: :pending)
+    #return unless relationship
 
-    relationship.update(status: :approved)
-  end
+    #relationship.update(status: :approved)
+  #end
+  
+  #def followed_relationships
+    #Relationship.where(followed_id: self.id)
+  #end
   
 end
