@@ -1,4 +1,8 @@
 class Video < ApplicationRecord
+  enum account_type: {
+    public_account: 0,   # 公開アカウント
+    private_account: 1   # 非公開アカウント
+  }
   
   belongs_to :user
   validates :title, presence: true

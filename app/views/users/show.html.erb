@@ -87,25 +87,29 @@
             </tr>
           </thead>
           <tbody>
+            <% if @user.private_account? && !current_user.approved_follow_request?(@user) && @user != current_user %>
+            <!-- リクエストが承認されていない場合のメッセージ -->
+            <td colspan="4">
+            <p>このユーザーの投稿情報は非公開です。リクエストを申請してください。</p>
+            </td>
+            <% else %>
             <% @videos.each do |video| %>
-              <tr>
-                <td> <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= find_youtube_url(video.youtube_url) %>"
-                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe> </td>
-                <td>
-                  <%= link_to video.title, video_path(video) %>
-                </td>
-                <td>
-                  <%= video.body %>
-                </td>
-              </tr>
-              <% end %>
+            <tr>
+            <td> <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= find_youtube_url(video.youtube_url) %>"
+          title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe> </td>
+            <td>
+            <%= link_to video.title, video_path(video) %>
+            </td>
+            <td>
+           <%= video.body %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>
+
           </tbody>
         </table>
-        <% if @user.private_account? && !current_user.approved_follow_request?(@user) && @user != current_user %> 
-            <!-- リクエストが承認されていない場合のメッセージ -->
-            <p>このユーザーの投稿情報は非公開です。リクエストを申請してください。</p>
-          <% end %>
       </div>
     </div>
   </div>
