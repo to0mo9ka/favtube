@@ -38,8 +38,8 @@ class User < ApplicationRecord
 
   
   # ユーザーをフォローする
-  def follow(followed_id, status)
-    following_relationships.create(followed_id: followed_id)
+  def follow(followed_id, status: 'approved')
+    following_relationships.create(followed_id: followed_id, status: status)
   end
 
   # ユーザーのフォローを外す

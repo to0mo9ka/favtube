@@ -2,7 +2,8 @@ class VideosController < ApplicationController
   def index
     @video = Video.new
     following_users = current_user.following_user.where(relationships: { status: :approved })
-    @videos = Video.where(user: following_users).or(Video.where(user: current_user)).page(params[:page]).reverse_order
+    public_users = User.where(account_type: "public_account")
+    @videos = Video.where(user: following_users).or(Video.where(user: public_users).or(Video.where(user: current_user))).page(params[:page]).reverse_order
   end
 
   def show
