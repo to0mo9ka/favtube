@@ -12,10 +12,12 @@ class UsersController < ApplicationController
     @follower_users = @user.follower_user
     
     if @user.private_account? && !current_user.approved_follow_request?(@user) && @user != current_user
-      @videos = [] # リクエストが承認されていない場合、@videos を空の配列に設定
-    else
-      @videos = @user.videos.page(params[:page]).reverse_order
-    end
+    @videos = [] # 非公開かつフォローが承認されていない場合、@videos を空の配列に設定
+  elsif @user.private_account? && current_user.approved_follow_request?(@user) && @user != current_user
+    @videos = @user.videos.page(params[:page]).reverse_order # 非公開かつフォローが承認された場合、@videos にユーザーの投稿をセット
+  else
+    @videos = @user.videos.page(params[:page]).reverse_order # 公開アカウントの場合、@videos にユーザーの投稿をセット
+  end
     
   end
   
