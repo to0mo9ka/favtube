@@ -71,6 +71,7 @@
                 </tr>
               </thead>
               <tbody>
+                
                 <% @videos.each do |video| %>
                   <tr>
                     <td>
@@ -95,6 +96,7 @@
                       <%= link_to "#{video.post_comments.count} コメント", video_path(video.id) %>
                     </td>
                   </tr>
+                  
                   <% end %>
               </tbody>
             </table>

@@ -1,11 +1,11 @@
 class VideosController < ApplicationController
   def index
-    @video = Video.new
-    following_users = current_user.following_user.where(relationships: { status: :approved })
-    public_users = User.where(account_type: "public_account")
-    @videos = Video.where(user: following_users).or(Video.where(user: public_users).or(Video.where(user: current_user))).page(params[:page]).reverse_order
+  @video = Video.new
+  following_user_ids = current_user.following_user.where(relationships: { status: 'approved' }).pluck(:id)
+  public_user_ids = User.where(account_type: "public_account").pluck(:id)
+  my_user_id = current_user.id
+  @videos = Video.where(user_id: following_user_ids + public_user_ids + [my_user_id]).page(params[:page]).reverse_order
   end
-
   def show
     @video = Video.find(params[:id])
     @post_comment = PostComment.new
