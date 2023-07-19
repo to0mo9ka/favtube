@@ -1,0 +1,9 @@
+<h2>information</h2>
+<h1>フォローリクエスト一覧</h1>
+<% @follow_requests.each do |request| %>
+  <p>
+    <%= request.follower.name %> さんからフォローリクエストが届いています。
+    <%= link_to '承認', approve_request_path(request_id: request.id), method: :post %> |
+    <%= link_to '拒否', reject_request_path(request_id: request.id), method: :delete %>
+  </p>
+<% end %>
