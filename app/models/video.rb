@@ -8,7 +8,7 @@ class Video < ApplicationRecord
   validates :title, presence: true
   
   validates :youtube_url, presence: true, format: {
-  with: %r{\A(https?://)?(www\.)?(youtube\.com/watch\?v=|youtu\.be/)([\w-]+)(\S+)?(\?t=\d+s?)?\z},
+  with: %r{\A(https?://)?(www\.)?(youtube\.com/watch\?v=|youtu\.be/)([\w-]+)(\S+)?(\?t=\d+s?)?(&enablejsapi=1)?\z},
   message: "is not a valid YouTube URL"}
   
   validates :body, presence: true, length: { maximum: 200 }
