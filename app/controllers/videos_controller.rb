@@ -1,11 +1,26 @@
 class VideosController < ApplicationController
   def index
-  @video = Video.new
-  following_user_ids = current_user.following_user.where(relationships: { status: 'approved' }).pluck(:id)
-  public_user_ids = User.where(account_type: "public_account").pluck(:id)
-  my_user_id = current_user.id
-  @videos = Video.where(user_id: following_user_ids + public_user_ids + [my_user_id]).page(params[:page]).reverse_order
+    @video = Video.new
+    # 自分の投稿のIDを取得
+    my_post_ids = current_user.videos.pluck(:id)
+
+    # 公開アカウントのユーザーIDを取得
+    public_user_ids = User.where(account_type: 'public_account').pluck(:id)
+
+    # フォローリクエストが承認されたユーザーのIDを取得
+    approved_followers_ids = current_user.following_relationships.where(status: 'approved').pluck(:followed_id)
+
+    # 承認してくれた非公開アカウントの投稿のIDを取得
+    approved_private_post_ids = Video.joins(:user).where(user_id: approved_followers_ids, users: { account_type: 'private_account' }).pluck(:id)
+
+    # 自分の投稿と公開アカウントの投稿と承認してくれた非公開アカウントの投稿のIDを取得
+    post_ids_to_show = my_post_ids + Video.where(user_id: public_user_ids).pluck(:id) + approved_private_post_ids
+
+    # 上記の投稿IDを持つ投稿を取得
+    @videos = Video.where(id: post_ids_to_show).page(params[:page]).reverse_order
+
   end
+
   def show
     @video = Video.find(params[:id])
     @post_comment = PostComment.new

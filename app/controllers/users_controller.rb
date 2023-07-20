@@ -28,9 +28,9 @@ class UsersController < ApplicationController
       else
         @videos = @user.videos.page(params[:page]).reverse_order
       end
-    else
-      @videos = @user.videos.page(params[:page]).reverse_order
-    end
+  else
+        @videos = @user.videos.page(params[:page]).reverse_order
+  end
     
   end
   
