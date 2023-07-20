@@ -57,7 +57,6 @@ class User < ApplicationRecord
   def following?(user)
     following_relationships.exists?(followed: user, status: 'approved')
   end
-  
   # フォローリクエストを承認する
   #def approved_follow_request(follower)
     #request = followed_relationships.find_by(followed: self)

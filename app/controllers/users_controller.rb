@@ -3,13 +3,13 @@ class UsersController < ApplicationController
     @users = User.all
     @video = Video.new
   end
-  
+
   def show
     @user = User.find(params[:id])
     @video = Video.new
     @following_users = @user.following_user
     @follower_users = @user.follower_user
-    
+
     #if @user.private_account? # ユーザーが非公開アカウントの場合
     #if !current_user.approved_follow_request?(@user) && @user != current_user # ログインしているユーザーがフォローリクエストを承認していない場合
       #@videos = [] # 非公開かつフォローが承認されていない場合、@videos を空の配列に設定
@@ -31,9 +31,9 @@ class UsersController < ApplicationController
   else
         @videos = @user.videos.page(params[:page]).reverse_order
   end
-    
+
   end
-  
+
   def follow
   @user = User.find(params[:id])
   if current_user.following?(@user)
@@ -51,7 +51,7 @@ class UsersController < ApplicationController
   redirect_to @user
   end
 
-  
+
   def follows
     user = User.find(params[:id])
     @users = user.following_user.page(params[:page]).per(10).reverse_order
@@ -61,7 +61,7 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     @users = user.follower_user.page(params[:page]).per(10).reverse_order
   end
-  
+
   def edit
     @user = User.find(params[:id])
     if @user == current_user
@@ -69,10 +69,10 @@ class UsersController < ApplicationController
       redirect_to user_path(current_user)
     end
   end
-  
+
   def update
     @user = User.find(params[:id])
-    
+
     if @user == current_user
       if @user.update(user_params)
         flash[:notice] = "You have updated user successfully."
@@ -82,7 +82,7 @@ class UsersController < ApplicationController
       end
     end
   end
-  
+
   private
 
   def user_params
