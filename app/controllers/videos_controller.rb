@@ -1,4 +1,6 @@
 class VideosController < ApplicationController
+  before_action :authenticate_user!
+  before_action :find_video, only: :show
   def index
     @video = Video.new
     # 自分の投稿のIDを取得
@@ -22,9 +24,12 @@ class VideosController < ApplicationController
   end
 
   def show
-    @video = Video.find(params[:id])
-    @post_comment = PostComment.new
-    @user = @video.user
+    if current_user_can_view?(@video)
+      @post_comment = PostComment.new
+      @user = @video.user
+    else
+      redirect_to user_path(current_user)
+    end
   end
 
   def create
@@ -64,6 +69,16 @@ class VideosController < ApplicationController
   end
   
   protected
+  def find_video
+    @video = Video.find(params[:id])
+  end
+
+  def current_user_can_view?(video)
+    # 自分の投稿か、公開アカウントの投稿か、承認してくれた非公開アカウントの投稿の場合にtrueを返す
+    current_user == video.user ||
+      video.user.account_type == 'public_account' ||
+      current_user.approved_follow_request?(video.user)
+  end
   
   def video_params
     params.require(:video).permit(:title, :youtube_url, :body)
