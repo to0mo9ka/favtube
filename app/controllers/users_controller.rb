@@ -16,10 +16,10 @@ class UsersController < ApplicationController
       # 非公開のメッセージを表示するコードを追加
       puts "User's videos are private and follow request is not approved."
     else
-      @videos = Video.where(user_id: @user.id).page(params[:page]).reverse_order
+      @videos = @user.videos.page(params[:page]).reverse_order
     end
   else
-    @videos = Video.where(user_id: @user.id).page(params[:page]).reverse_order
+    @videos = @user.videos.page(params[:page]).reverse_order
   end
   end
 
