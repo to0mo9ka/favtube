@@ -4,6 +4,7 @@ class User < ApplicationRecord
     private_account: 1
   }
   
+  after_initialize :set_default_account_type, if: :new_record?
   def self.account_types
     {
       public_account: '公開アカウント',
