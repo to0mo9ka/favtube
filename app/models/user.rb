@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   enum account_type: {
-    public_account: 0,   # 公開アカウント
-    private_account: 1   # 非公開アカウント
+    public_account: 0,
+    private_account: 1
   }
   
   def self.account_types
@@ -38,14 +38,14 @@ class User < ApplicationRecord
 
   
   # ユーザーをフォローする
-  def follow(followed_id, status: 'approved')
+  def follow(followed_id, status: 1)
     following_relationships.create(followed_id: followed_id, status: status)
   end
 
   # ユーザーのフォローを外す
   def unfollow(user_id)
   # 非公開アカウントの場合は承認済みのフォローリクエストのみを対象とする
-  relationship = following_relationships.find_by(followed_id: user_id, status: 'approved')
+  relationship = following_relationships.find_by(followed_id: user_id, status: 1)
 
   # フォローリクエストが承認されていればフォローを解除
   relationship.destroy if relationship
@@ -55,8 +55,9 @@ class User < ApplicationRecord
 
   # フォローしていればtrueを返す
   def following?(user)
-    following_relationships.exists?(followed: user, status: 'approved')
+    following_relationships.exists?(followed: user, status: 1)
   end
+  
   # フォローリクエストを承認する
   #def approved_follow_request(follower)
     #request = followed_relationships.find_by(followed: self)
@@ -65,13 +66,13 @@ class User < ApplicationRecord
   
   # フォローリクエストを送信しているかどうかを確認するメソッド
   def pending_follow_request?(user)
-    following_relationships.exists?(followed: user, status: 'pending')
+    following_relationships.exists?(followed: user, status: 0)
   end
   
   # フォローリクエストが承認されていれば true を返す
   def approved_follow_request?(user)
     # followed_relationships を使ってフォローリクエストが承認されているかを確認する
-    relationship = following_relationships.find_by(followed_id: user.id, status: 'approved')
+    relationship = following_relationships.find_by(followed_id: user.id, status: 1)
 
     # 必要に応じてログを出力して実行結果を確認する
     puts "Checking approved_follow_request? for followed_id=#{self.id} and follower_id=#{user.id}"

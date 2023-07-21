@@ -68,8 +68,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     super do |resource|
       # フォームで選択されたaccount_typeを保存する
-      resource.account_type = params[:user][:account_type]
-      resource.save
+    resource.account_type = params[:user][:account_type].to_i
+    
     end
   end
 
@@ -82,8 +82,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def update
     super do |resource|
       # フォームで選択されたaccount_typeを更新する
-      resource.account_type = params[:user][:account_type]
-      resource.save
+      resource.account_type = params[:user][:account_type].to_i
     end
   end
 
