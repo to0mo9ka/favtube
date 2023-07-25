@@ -64,7 +64,7 @@
                 <%= link_to @user.name, user_path(@user) %>
               </td>
               <td>
-                <div><iframe width="320" height="180" src="https://www.youtube.com/embed/<%= find_youtube_url(@video.youtube_url) %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+                <div><iframe id="youtube-player" width="320" height="180" src="https://www.youtube.com/embed/<%= find_youtube_url(@video.youtube_url) %>&enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
                   
                 </iframe>
 
@@ -115,6 +115,7 @@
                 <%= f.text_area :comment, rows:'2', cols: '50', placeholder: "コメントをここに" %>
                   <%= f.submit "Comment" %>
                     <% end %>
+                    <a href="" onclick="clickTime(50); return false">00:50</a>
             </td>
           </div>
         </div>
@@ -152,3 +153,14 @@
     </div>
   </div>
 </main>
+<script>
+function clickTime(sec) {
+  videoControl('youtube-player', 'seekTo', [sec]);
+}
+function videoControl(elementId, action, args){ 
+  var playerWindow = document.getElementById(elementId).contentWindow;
+  var _args = args !== undefined ? JSON.stringify(args) : '""'
+  var message = '{"event":"command","func":"' + action + '","args":' + _args + '}';
+  playerWindow.postMessage(message, '*');
+}
+</script>
