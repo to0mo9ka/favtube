@@ -123,10 +123,10 @@
             
             <%= link_to user_path(post_comment.user) do %>
               <% if post_comment.user.profile_image.present? %>
-  <%= attachment_image_tag post_comment.user, :profile_image, :fill, 40, 40, format: 'jpeg', style: 'border-radius: 50%' %>
-<% else %>
-  <%= image_tag('default-image.jpg', width: 40, height: 40, style: 'border-radius: 50%') %>
-<% end %>
+                <%= attachment_image_tag post_comment.user, :profile_image, :fill, 40, 40, format: 'jpeg', style: 'border-radius: 50%' %>
+              <% else %>
+                <%= image_tag('default-image.jpg', width: 40, height: 40, style: 'border-radius: 50%') %>
+              <% end %>
 
                 <div>
                   <%= post_comment.user.name %>
