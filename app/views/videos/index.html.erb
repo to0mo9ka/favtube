@@ -21,7 +21,7 @@
             <h2>User info</h2>
             <table class='table'>
               <tr>
-                <%= attachment_image_tag current_user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "default-image.jpg" %>
+                <%= attachment_image_tag current_user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "default-image.jpg", style: 'border-radius: 50%' %>
               </tr>
               <tr>
                 <th>name</th>
@@ -76,7 +76,7 @@
                   <tr>
                     <td>
                       <%= link_to user_path(video.user) do %>
-                        <%= attachment_image_tag video.user, :profile_image, :fill, 80, 80, format: 'jpeg', fallback: "default-image.jpg" %>
+                        <%= attachment_image_tag video.user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "default-image.jpg", style: 'border-radius: 50%' %>
                           <div>
                             <%= video.user.name %>
                           </div>
