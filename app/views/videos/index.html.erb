@@ -65,8 +65,8 @@
                 <tr>
                   <th>Image</th>
                   <th></th>
-                  <th>Opinion</th>
-                  <th>Comment</th>
+                  <th><div class="element">Opinion</div></th>
+                  <th><div class="element">Comment</div></th>
                   <th></th>
                 </tr>
               </thead>
@@ -75,30 +75,38 @@
                 <% @videos.each do |video| %>
                   <tr>
                     <td>
-                      <%= link_to user_path(video.user) do %>
-                        <% if video.user.profile_image.present? %>
-  <%= attachment_image_tag video.user, :profile_image, :fill, 80, 80, format: 'jpeg', style: 'border-radius: 50%' %>
-<% else %>
-  <%= image_tag('default-image.jpg', width: 80, height: 80, style: 'border-radius: 50%') %>
-<% end %>
-                          <div>
-                            <%= video.user.name %>
-                          </div>
-                          <% end %>
-                    </td>
+  <%= link_to user_path(video.user) do %>
+      <% if video.user.profile_image.present? %>
+        <%= attachment_image_tag video.user, :profile_image, :fill, 80, 80, format: 'jpeg', class: 'profile-image', style: 'border-radius: 50%' %>
+      <% else %>
+        <%= image_tag('default-image.jpg', width: 80, height: 80, class: 'profile-image', style: 'border-radius: 50%') %>
+      <% end %>
+    <div>
+      <%= video.user.name %>
+    </div>
+  <% end %>
+</td>
+
                     <td>
-                      <div> <iframe width="320" height="180" src="https://www.youtube.com/embed/<%= find_youtube_url(video.youtube_url) %>"
+                      <div> <iframe class="video-iframe" src="https://www.youtube.com/embed/<%= find_youtube_url(video.youtube_url) %>"
                           title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowfullscreen>
         </iframe> </div>
                       <%= link_to video.title, video_path(video) %>
                     </td>
                     <td>
+                    <div class="element">
+                    
                       <%= video.body %>
+                    
+                    </div>
                     </td>
                     <td>
+                    <div class="element">  
                       <%= link_to "#{video.post_comments.count} コメント", video_path(video.id) %>
+                    </div>
                     </td>
+                    
                   </tr>
                   
                   <% end %>

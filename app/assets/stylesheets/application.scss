@@ -17,3 +17,36 @@
 @import "bootstrap";
 @import 'font-awesome-sprockets';
 @import 'font-awesome';
+@media screen and (max-width: 460px){
+.element {display:none}
+}
+
+/* デフォルトのスタイル */
+.video-iframe {
+  width: 320px;
+  height: 180px;
+}
+
+/* 画面幅が460px以下の場合のスタイル */
+@media screen and (max-width: 460px) {
+  .video-iframe {
+    width: 160px;
+    height: 90px;
+  }
+}
+
+/* デフォルトのスタイル */
+.profile-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+/* 画面幅が460px以下の場合のスタイル */
+@media screen and (max-width: 460px) {
+  .profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+}
