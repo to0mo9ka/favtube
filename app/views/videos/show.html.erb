@@ -55,9 +55,9 @@
                 <a>
                   <%= link_to user_path(@video.user) do %>
                     <% if @user.profile_image.present? %>
-                      <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg', style: 'border-radius: 50%' %>
+                      <%= attachment_image_tag @user, :profile_image, :fill, 80, 80, format: 'jpeg', style: 'border-radius: 50%' %>
                         <% else %>
-                          <%= image_tag "default-image.jpg" %>
+                          <%= image_tag "default-image.jpg", width: 80, height: 80, style: 'border-radius: 50%' %>
                             <% end %>
                               <% end %>
                 </a> <br>
@@ -113,10 +113,8 @@
             <td>
               <%= form_with(model:[@video, @post_comment], local: true) do |f| %>
                 <%= f.text_area :comment, rows:'2', cols: '50', placeholder: "コメントをここに" %>
-                <a href="" onclick="clickTime(50); return false">00:50</a>
                   <%= f.submit "Comment" %>
                     <% end %>
-                    <a href="" onclick="clickTime(50); return false">00:50</a>
             </td>
           </div>
         </div>
@@ -124,7 +122,12 @@
           <div class="row">
             
             <%= link_to user_path(post_comment.user) do %>
-              <%= attachment_image_tag post_comment.user, :profile_image, :fill, 40, 40, format: 'jpeg', fallback: "default-image.jpg", style: 'border-radius: 50%' %>
+              <% if post_comment.user.profile_image.present? %>
+  <%= attachment_image_tag post_comment.user, :profile_image, :fill, 40, 40, format: 'jpeg', style: 'border-radius: 50%' %>
+<% else %>
+  <%= image_tag('default-image.jpg', width: 40, height: 40, style: 'border-radius: 50%') %>
+<% end %>
+
                 <div>
                   <%= post_comment.user.name %>
                 </div>

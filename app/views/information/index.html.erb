@@ -1,7 +1,9 @@
-
 <h1>フォローリクエスト一覧</h1>
 <% @follow_requests.each do |request| %>
   <p>
+    <%= link_to user_path(request.follower) do %>
+    <%= attachment_image_tag request.follower, :profile_image, :fill, 50, 50, fallback: "default-image.jpg", class: "mb-3 mt-3 ml-3 profile-img", style: 'border-radius: 50%' %>
+    <% end %>
     <%= request.follower.name %> さんからフォローリクエストが届いています。
     <%= link_to '承認', approve_request_path(request_id: request.id), method: :post %> |
     <%= link_to '拒否', reject_request_path(request_id: request.id), method: :delete %>
