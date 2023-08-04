@@ -48,7 +48,7 @@
       </div>
       <div class='col-md-8 offset-md-1'>
         <h2>Video detail</h2>
-        <table class='table table-hover table-inverse'>
+        <div class='table table-hover table-inverse'>
           <tbody>
             <tr>
               <td>
@@ -101,7 +101,7 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </div>
         <div class='row'> </div>
         <div class='row'>
           <td>
@@ -112,7 +112,7 @@
           <div style="margin-left: 40px;">
             <td>
               <%= form_with(model:[@video, @post_comment], local: true) do |f| %>
-                <%= f.text_area :comment, rows:'2', cols: '50', placeholder: "コメントをここに" %>
+                <%= f.text_area :comment, rows:'2', cols: '30', placeholder: "コメントをここに" %>
                   <%= f.submit "Comment" %>
                     <% end %>
             </td>
